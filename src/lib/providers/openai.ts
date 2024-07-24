@@ -1,38 +1,68 @@
 import { ChatOpenAI, OpenAIEmbeddings } from '@langchain/openai';
-import { getOpenaiApiKey } from '../../config';
+import {
+  getOpenaiApiKey,
+  getOpenaiApiEndpoint,
+  getOpenaiModel,
+  getOpenaiEmbeddingsModel,
+} from '../../config';
 import logger from '../../utils/logger';
 
 export const loadOpenAIChatModels = async () => {
   const openAIApiKey = getOpenaiApiKey();
+  const apiEndpoint = getOpenaiApiEndpoint();
+  const model = getOpenaiModel();
 
   if (!openAIApiKey) return {};
 
+  if (apiEndpoint) {
+    logger.info(`OpenAI 使用自定义 API 端点： ${apiEndpoint}`);
+  }
+
   try {
+    const baseConfig = {
+      openAIApiKey,
+      configuration: {
+        baseURL: apiEndpoint,
+      },
+    };
+
+    if (model) {
+      logger.info(`OpenAI 使用自定义模型： ${model}`);
+
+      return {
+        [model]: new ChatOpenAI({
+          modelName: model,
+          temperature: 0.7,
+          ...baseConfig,
+        }),
+      };
+    }
+
     const chatModels = {
       'GPT-3.5 turbo': new ChatOpenAI({
-        openAIApiKey,
         modelName: 'gpt-3.5-turbo',
         temperature: 0.7,
+        ...baseConfig,
       }),
       'GPT-4': new ChatOpenAI({
-        openAIApiKey,
         modelName: 'gpt-4',
         temperature: 0.7,
+        ...baseConfig,
       }),
       'GPT-4 turbo': new ChatOpenAI({
-        openAIApiKey,
         modelName: 'gpt-4-turbo',
         temperature: 0.7,
+        ...baseConfig,
       }),
       'GPT-4 omni': new ChatOpenAI({
-        openAIApiKey,
         modelName: 'gpt-4o',
         temperature: 0.7,
+        ...baseConfig,
       }),
       'GPT-4 omni mini': new ChatOpenAI({
-        openAIApiKey,
         modelName: 'gpt-4o-mini',
         temperature: 0.7,
+        ...baseConfig,
       }),
     };
 
@@ -45,18 +75,42 @@ export const loadOpenAIChatModels = async () => {
 
 export const loadOpenAIEmbeddingsModels = async () => {
   const openAIApiKey = getOpenaiApiKey();
+  const apiEndpoint = getOpenaiApiEndpoint();
+  const model = getOpenaiEmbeddingsModel();
 
   if (!openAIApiKey) return {};
 
+  if (apiEndpoint) {
+    logger.info(`OpenAI 使用自定义 API 端点： ${apiEndpoint}`);
+  }
+
   try {
+    const baseConfig = {
+      openAIApiKey,
+      configuration: {
+        baseURL: apiEndpoint,
+      },
+    };
+
+    if (model) {
+      logger.info(`OpenAI 使用自定义嵌入模型： ${model}`);
+
+      return {
+        [model]: new OpenAIEmbeddings({
+          modelName: model,
+          ...baseConfig,
+        }),
+      };
+    }
+
     const embeddingModels = {
       'Text embedding 3 small': new OpenAIEmbeddings({
-        openAIApiKey,
         modelName: 'text-embedding-3-small',
+        ...baseConfig,
       }),
       'Text embedding 3 large': new OpenAIEmbeddings({
-        openAIApiKey,
         modelName: 'text-embedding-3-large',
+        ...baseConfig,
       }),
     };
 

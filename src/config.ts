@@ -15,9 +15,16 @@ interface Config {
     ANTHROPIC: string;
   };
   API_ENDPOINTS: {
+    OPENAI: string 
     SEARXNG: string;
     OLLAMA: string;
   };
+  MODELS: {
+    OPENAI: string
+  },
+  EMBDEDINGS_MODELS: {
+    OPENAI: string
+  }
 }
 
 type RecursivePartial<T> = {
@@ -36,6 +43,12 @@ export const getSimilarityMeasure = () =>
 
 export const getOpenaiApiKey = () => loadConfig().API_KEYS.OPENAI;
 
+export const getOpenaiApiEndpoint = () => loadConfig().API_ENDPOINTS.OPENAI;
+
+export const getOpenaiModel = () => loadConfig().MODELS.OPENAI;
+
+export const getOpenaiEmbeddingsModel = () => loadConfig().EMBDEDINGS_MODELS.OPENAI;
+
 export const getGroqApiKey = () => loadConfig().API_KEYS.GROQ;
 
 export const getAnthropicApiKey = () => loadConfig().API_KEYS.ANTHROPIC;
@@ -43,6 +56,7 @@ export const getAnthropicApiKey = () => loadConfig().API_KEYS.ANTHROPIC;
 export const getSearxngApiEndpoint = () => loadConfig().API_ENDPOINTS.SEARXNG;
 
 export const getOllamaApiEndpoint = () => loadConfig().API_ENDPOINTS.OLLAMA;
+
 
 export const updateConfig = (config: RecursivePartial<Config>) => {
   const currentConfig = loadConfig();

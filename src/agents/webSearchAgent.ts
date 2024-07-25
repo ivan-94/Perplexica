@@ -34,10 +34,15 @@ Rephrased: Population of New York City
 3. Follow up question: What is Docker?
 Rephrased: What is Docker
 
-Conversation:
-{chat_history}
+4. Follow up question: Hi
+Rephrased: not_needed 
 
-Follow up question: {query}
+Conversation:
+<conversation>
+{chat_history}
+</conversation>
+
+Follow up question: <query>{query}</query>
 Rephrased question:
 `;
 

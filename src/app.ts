@@ -1,8 +1,9 @@
+import 'dotenv/config';
 import { startWebSocketServer } from './websocket';
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
-import routes from './routes';
+import routes, { rootRouter } from './routes';
 import { getPort } from './config';
 import logger from './utils/logger';
 
@@ -18,6 +19,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.use(rootRouter);
 app.use('/api', routes);
 app.get('/api', (_, res) => {
   res.status(200).json({ status: 'ok' });
